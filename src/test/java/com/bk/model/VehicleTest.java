@@ -14,7 +14,7 @@ public class VehicleTest {
         Vehicle vehicle = new Vehicle(registrationNumber,color);
 
         assertNotNull(vehicle);
-        assertEquals(vehicle.getColor(),color);
-        assertEquals(vehicle.getRegistrationNo(),registrationNumber);
+        assertEquals(color, vehicle.getColor());
+        assertEquals(registrationNumber,vehicle.getRegistrationNo());
     }
 }
