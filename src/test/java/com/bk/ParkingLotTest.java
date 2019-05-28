@@ -112,7 +112,7 @@ public class ParkingLotTest {
         int slotNumber = parkingLot.parkVehicle(regNo1,color1);
         assertEquals(1,slotNumber);
         assertEquals(2, parkingLot.getAvailableSlots().size());
-        assertEquals(1,parkingLot.getSlotNumberByRegistrationNumber(regNo1));
+        assertEquals(slotNumber,parkingLot.getSlotNumberByRegistrationNumber(regNo1));
         assertEquals(regNo1,parkingLot.getSlotList().get(slotNumber).getVehicle().getRegistrationNumber());
 
         String regNo2 = "reg2";
@@ -120,16 +120,23 @@ public class ParkingLotTest {
         int slotNumber2 = parkingLot.parkVehicle(regNo2,color2);
         assertEquals(2,slotNumber2);
         assertEquals(1, parkingLot.getAvailableSlots().size());
-        assertEquals(2,parkingLot.getSlotNumberByRegistrationNumber(regNo2));
+        assertEquals(slotNumber2,parkingLot.getSlotNumberByRegistrationNumber(regNo2));
         assertEquals(regNo2,parkingLot.getSlotList().get(slotNumber2).getVehicle().getRegistrationNumber());
 
-        int freedSlotNumber = parkingLot.freeSlot(2);
+        String regNo3 = "reg3";
+        String color3 = "red";
+        int slotNumber3 = parkingLot.parkVehicle(regNo3,color3);
+        assertEquals(3,slotNumber3);
+        assertEquals(0, parkingLot.getAvailableSlots().size());
+        assertEquals(slotNumber3,parkingLot.getSlotNumberByRegistrationNumber(regNo3));
+        assertEquals(regNo2,parkingLot.getSlotList().get(slotNumber2).getVehicle().getRegistrationNumber());
 
+        int freedSlotNumber = parkingLot.freeSlot(1);
         assertNotEquals(-1,freedSlotNumber);
-        assertEquals(2,parkingLot.getAvailableSlots().size());
-        assertEquals(-1, parkingLot.getSlotNumberByRegistrationNumber(regNo2));
-        assertEquals(1, parkingLot.getSlotNumberByRegistrationNumber(regNo1));
+        assertEquals(1,parkingLot.getAvailableSlots().size());
+        assertEquals(-1, parkingLot.getSlotNumberByRegistrationNumber(regNo1));
         assertNull(parkingLot.getSlotList().get(freedSlotNumber).getVehicle());
+        assertEquals(2,parkingLot.getAvailableSlots().first().getSlotNumber());
     }
 
 
