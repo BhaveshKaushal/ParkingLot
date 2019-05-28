@@ -11,7 +11,7 @@ public class SlotTest {
     public void slotTest() {
         Slot slot = new Slot(1);
         assertNotNull(slot);
-        assertEquals(1,slot.getId());
+        assertEquals(1,slot.getSlotNumber());
         assertNull(slot.getVehicle());
     }
 }

@@ -1,16 +1,16 @@
 package main.java.com.bk.model;
 
-public class Slot {
-   private int id;
+public class Slot implements Comparable<Slot>{
+   private int slotNumber;
 
     private Vehicle vehicle;
 
-    public Slot(int id) {
-        this.id = id;
+    public Slot(int slotNumber) {
+        this.slotNumber = slotNumber;
     }
 
-    public int getId() {
-        return id;
+    public int getSlotNumber() {
+        return slotNumber;
     }
 
     public Vehicle getVehicle() {
@@ -20,4 +20,10 @@ public class Slot {
     public void setVehicle(Vehicle vehicle) {
         this.vehicle = vehicle;
     }
+
+    @Override
+    public int compareTo(Slot o) {
+        return (this.getSlotNumber() > o.getSlotNumber() ? this.getSlotNumber() : o.getSlotNumber()) ;
+    }
+
 }
