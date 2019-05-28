@@ -12,11 +12,11 @@ public class ParkingLot {
 
     private Map<String, Slot> registrationMap;
 
-    private SortedSet<Slot> availableSlots;
-
-    private List<Slot> slotList;
+    private Map<Integer,Slot> slotMap;
 
     private Map<String,List<Slot>> reservvationByColors;
+
+    private int nextFreeSlot;
 
     public ParkingLot(int size) {
         init(size);
@@ -26,12 +26,11 @@ public class ParkingLot {
         this.size = size;
         this.registrationMap =  new HashMap<>();
         this.reservvationByColors = new HashMap<>();
-        this.slotList = new ArrayList<>(size);
-        this.availableSlots = new TreeSet<>();
+        this.slotMap = new HashMap<>(size);
+        this.nextFreeSlot = 1;
         for(int i = 0; i< size; i++) {
             Slot slot = new Slot(i+1);
-            availableSlots.add(slot);
-            slotList.add(slot);
+            slotMap.put(i+1,slot);
         }
     }
 
@@ -43,31 +42,25 @@ public class ParkingLot {
         this.size = size;
     }
 
-    public SortedSet<Slot> getAvailableSlots() {
-        return availableSlots;
-    }
 
-    public List<Slot> getSlotList() {
-        return slotList;
+    public Map<Integer,Slot> getSlotMap() {
+        return this.slotMap;
     }
 
     public int parkVehicle(String registrationNumber, String color) {
         Vehicle vehicle  = new Vehicle(registrationNumber, color);
 
-        if(this.availableSlots.size() < 1) {
+        if(nextFreeSlot < 1) {
             return -1;
         }
 
-       Slot slot =  this.availableSlots.first();
-
-       availableSlots.remove(slot);
-       //System.out.println("Available Slots: "+availableSlots);
-       slot.setVehicle(vehicle);
-
+       Slot slot =  slotMap.get(nextFreeSlot);
+      slot.setVehicle(vehicle);
        this.registrationMap.put(registrationNumber,slot);
 
-       this.slotList.add(slot.getSlotNumber(),slot);
+       this.slotMap.put(slot.getSlotNumber(),slot);
        updateColorsMap(slot,false);
+       updateNextFreeSlot();
 
        return slot.getSlotNumber();
     }
@@ -84,7 +77,7 @@ public class ParkingLot {
 
     public int freeSlot(int slotNumber) {
 
-      Slot slot =  this.slotList.get(slotNumber);
+      Slot slot =  this.slotMap.get(slotNumber);
 
       if(slotNumber > this.size || slotNumber < 1) {
           System.out.println("Slot is not present in the parking system");
@@ -96,8 +89,12 @@ public class ParkingLot {
       updateColorsMap(slot,true);
       slot.setVehicle(null);
 
-      this.slotList.add(slotNumber,slot);
-      this.availableSlots.add(slot);
+      this.slotMap.put(slotNumber,slot);
+      if(this.nextFreeSlot == -1) {
+          this.nextFreeSlot = slotNumber;
+      } else if(slotNumber  < nextFreeSlot) {
+          this.nextFreeSlot = slotNumber;
+      }
 
       return slotNumber;
 
@@ -129,8 +126,24 @@ public class ParkingLot {
         return slotNumbers;
     }
 
+    public int getNextFreeSlot() {
+        return this.nextFreeSlot;
+    }
+
     private List<Slot> getSlotListByColor(String color){
 
         return this.reservvationByColors.get(color);
+    }
+
+    private void updateNextFreeSlot(){
+       Optional<Slot> nextSlot= this.slotMap.values().stream()
+                .filter(slot -> slot.getVehicle()==null).findFirst();
+
+       if(nextSlot.isPresent()) {
+           this.nextFreeSlot =  nextSlot.get().getSlotNumber();
+       } else {
+           this.nextFreeSlot = -1;
+       }
+
     }
 }
