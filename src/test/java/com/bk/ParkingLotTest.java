@@ -84,5 +84,26 @@ public class ParkingLotTest {
 
     }
 
+    @Test
+    public void parkingFullTest() {
+        int size = 3;
+
+        ParkingLot parkingLot = new ParkingLot(size);
+
+        int slotNumber = parkingLot.parkVehicle("test_reg1","white");
+        assertEquals(1, slotNumber);
+
+        int slotNumber2 = parkingLot.parkVehicle("test_reg2","black");
+        assertEquals(2,slotNumber2);
+
+
+        int slotNumber3 = parkingLot.parkVehicle("test_reg3","blue");
+        assertEquals(3,slotNumber3);
+
+        int slotNumber4 = parkingLot.parkVehicle("parking_full","red");
+        assertEquals(-1,slotNumber4);
+
+    }
+
 
 }

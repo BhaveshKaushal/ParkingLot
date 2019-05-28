@@ -49,6 +49,11 @@ public class ParkingLot {
 
     public int parkVehicle(String registrationNumber, String color) {
         Vehicle vehicle  = new Vehicle(registrationNumber, color);
+
+        if(this.availableSlots.size() < 1) {
+            return -1;
+        }
+
        Slot slot =  this.availableSlots.first();
 
        availableSlots.remove(slot);
