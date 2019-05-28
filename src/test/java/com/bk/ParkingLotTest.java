@@ -7,6 +7,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -104,6 +105,7 @@ public class ParkingLotTest {
     }
 
 
+
     @Test
     public void freeSlotTest() {
 
@@ -136,7 +138,49 @@ public class ParkingLotTest {
         assertEquals(1,parkingLot.getAvailableSlots().size());
         assertEquals(-1, parkingLot.getSlotNumberByRegistrationNumber(regNo1));
         assertNull(parkingLot.getSlotList().get(freedSlotNumber).getVehicle());
-        assertEquals(2,parkingLot.getAvailableSlots().first().getSlotNumber());
+        assertEquals(1,parkingLot.getAvailableSlots().first().getSlotNumber());
+    }
+
+    @Test
+    public void getSlotListbyColorTest(){
+        String regNo1= "regNo1";
+        String color1 = "red";
+        int slotNumber1 = parkingLot.parkVehicle(regNo1,color1);
+
+        String regNo2= "regNo2";
+        int slotNumber2 = parkingLot.parkVehicle(regNo2,color1);
+
+        String regNo3= "regNo3";
+        String color2 = "black";
+        int slotNumber3 = parkingLot.parkVehicle(regNo3,color2);
+
+       List<Integer> redSlotNumbers  = parkingLot.getSlotNumbersByColor(color1);
+       assertNotNull(redSlotNumbers);
+       assertFalse(redSlotNumbers.isEmpty());
+       assertEquals(2, redSlotNumbers.size());
+       assertEquals(Arrays.asList(1,2),redSlotNumbers);
+
+       List<Integer> blackSlotNumbers = parkingLot.getSlotNumbersByColor(color2);
+        assertNotNull(blackSlotNumbers);
+        assertFalse(blackSlotNumbers.isEmpty());
+        assertEquals(1, blackSlotNumbers.size());
+        assertEquals(Collections.singletonList(3),blackSlotNumbers);
+
+        int freedBlackSlot =  parkingLot.freeSlot(blackSlotNumbers.get(0));
+        assertEquals(3,freedBlackSlot);
+
+        List<Integer> noBlackSlotNumberList = parkingLot.getSlotNumbersByColor(color2);
+        assertNotNull(noBlackSlotNumberList);
+        assertTrue(noBlackSlotNumberList.isEmpty());
+
+        int freedRedSlot = parkingLot.freeSlot(redSlotNumbers.get(0));
+        assertEquals(1,freedRedSlot);
+        redSlotNumbers = parkingLot.getSlotNumbersByColor(color1);
+
+        assertFalse(redSlotNumbers.isEmpty());
+        assertEquals(1,redSlotNumbers.size());
+
+
     }
 
 
