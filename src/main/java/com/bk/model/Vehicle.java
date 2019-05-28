@@ -3,21 +3,21 @@ package main.java.com.bk.model;
 import java.util.Objects;
 
 public class Vehicle {
-   private String registrationNo;
+   private String registrationNumber;
 
     private String color;
 
-    public String getRegistrationNo() {
-        return registrationNo;
+    public String getRegistrationNumber() {
+        return registrationNumber;
     }
 
-    public Vehicle(String registrationNo, String color) {
-        this.registrationNo = registrationNo;
+    public Vehicle(String registrationNumber, String color) {
+        this.registrationNumber = registrationNumber;
         this.color = color;
     }
 
-    public void setRegistrationNo(String registrationNo) {
-        this.registrationNo = registrationNo;
+    public void setRegistrationNumber(String registrationNo) {
+        this.registrationNumber = registrationNo;
     }
 
     public String getColor() {
@@ -33,19 +33,19 @@ public class Vehicle {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Vehicle vehicle = (Vehicle) o;
-        return Objects.equals(registrationNo, vehicle.registrationNo) &&
+        return Objects.equals(registrationNumber, vehicle.registrationNumber) &&
                 Objects.equals(color, vehicle.color);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(registrationNo, color);
+        return Objects.hash(registrationNumber, color);
     }
 
     @Override
     public String toString() {
         return "Vehicle{" +
-                "registrationNo='" + registrationNo + '\'' +
+                "registrationNo='" + registrationNumber + '\'' +
                 ", color='" + color + '\'' +
                 '}';
     }

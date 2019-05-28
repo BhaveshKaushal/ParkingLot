@@ -1,5 +1,7 @@
 package main.java.com.bk.model;
 
+import java.util.Objects;
+
 public class Slot implements Comparable<Slot>{
    private int slotNumber;
 
@@ -23,7 +25,28 @@ public class Slot implements Comparable<Slot>{
 
     @Override
     public int compareTo(Slot o) {
-        return (this.getSlotNumber() > o.getSlotNumber() ? this.getSlotNumber() : o.getSlotNumber()) ;
+        return (this.getSlotNumber() - o.getSlotNumber()) ;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Slot slot = (Slot) o;
+        return slotNumber == slot.slotNumber &&
+                Objects.equals(vehicle, slot.vehicle);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(slotNumber, vehicle);
+    }
+
+    @Override
+    public String toString() {
+        return "Slot{" +
+                "slotNumber=" + slotNumber +
+                ", vehicle=" + vehicle +
+                '}';
+    }
 }

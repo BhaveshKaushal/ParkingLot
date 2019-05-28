@@ -2,6 +2,7 @@ package test.java.com.bk;
 
 import main.java.com.bk.ParkingLot;
 import main.java.com.bk.model.Slot;
+import main.java.com.bk.model.Vehicle;
 import org.junit.Test;
 
 import java.util.Arrays;
@@ -17,7 +18,7 @@ public class ParkingLotTest {
         for(int i = 0; i < size; i++) {
             Slot slot =  slotList.get(i);
             assertNotNull(slot);
-            assertEquals(i,slot.getSlotNumber());
+            assertEquals(i+1,slot.getSlotNumber());
             assertNull(slot.getVehicle());
         }
     }
@@ -53,6 +54,35 @@ public class ParkingLotTest {
 
     }
 
+    @Test
+    public void parkTest() {
+        int size = 3;
+        ParkingLot parkingLot = new ParkingLot(size);
+
+        assertNotNull(parkingLot);
+        assertNotNull(parkingLot.getAvailableSlots());
+        assertNotNull(parkingLot.getSlotList());
+        assertEquals(size, parkingLot.getAvailableSlots().size());
+        assertEquals(size,parkingLot.getSlotList().size());
+
+        String registrationNumber = "test-number";
+        String color = "white";
+        int slotNumber = parkingLot.parkVehicle(registrationNumber,color);
+        assertNotNull(parkingLot.getAvailableSlots());
+        assertEquals(2,parkingLot.getAvailableSlots().size());
+        assertNotNull(parkingLot.getAvailableSlots().first());
+        assertEquals(2,parkingLot.getAvailableSlots().first().getSlotNumber());
+        Slot reservedSlot = parkingLot.getSlotList().get(0);
+        assertNotNull(reservedSlot);
+        assertEquals(slotNumber, reservedSlot.getSlotNumber());
+
+        Vehicle vehicle = reservedSlot.getVehicle();
+        assertNotNull(vehicle);
+        assertEquals(color, vehicle.getColor());
+        assertEquals(registrationNumber,vehicle.getRegistrationNumber());
+        assertEquals(1,parkingLot.getSlotNumberByRegistrationNumber(registrationNumber));
+
+    }
 
 
 }
