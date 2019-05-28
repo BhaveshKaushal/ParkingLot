@@ -76,4 +76,24 @@ public class ParkingLot {
             return -1;
         }
     }
+
+    public int freeSlot(int slotNumber) {
+
+      Slot slot =  this.slotList.get(slotNumber);
+
+      if(slotNumber > this.size || slotNumber < 1) {
+          System.out.println("Slot is not present in the parking system");
+      }
+
+     String registrationNumber =  slot.getVehicle().getRegistrationNumber();
+
+     this.reservedMap.remove(registrationNumber);
+      slot.setVehicle(null);
+
+      this.slotList.add(slotNumber,slot);
+      this.availableSlots.add(slot);
+
+      return slotNumber;
+
+    }
 }
