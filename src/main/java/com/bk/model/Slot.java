@@ -1,4 +1,4 @@
-package main.java.com.bk.model;
+package com.bk.model;
 
 import java.util.Objects;
 

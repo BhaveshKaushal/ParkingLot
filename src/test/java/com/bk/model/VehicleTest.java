@@ -1,6 +1,4 @@
-package test.java.com.bk.model;
-
-import main.java.com.bk.model.Vehicle;
+package com.bk.model;
 
 import static org.junit.Assert.*;
 import org.junit.Test;

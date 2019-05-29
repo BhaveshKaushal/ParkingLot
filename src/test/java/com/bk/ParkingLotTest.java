@@ -1,8 +1,7 @@
-package test.java.com.bk;
+package com.bk;
 
-import main.java.com.bk.ParkingLot;
-import main.java.com.bk.model.Slot;
-import main.java.com.bk.model.Vehicle;
+import com.bk.model.Slot;
+import com.bk.model.Vehicle;
 import org.junit.Before;
 import org.junit.Test;
 

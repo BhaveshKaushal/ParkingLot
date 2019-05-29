@@ -1,6 +1,5 @@
-package test.java.com.bk.model;
+package com.bk.model;
 
-import main.java.com.bk.model.Slot;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
