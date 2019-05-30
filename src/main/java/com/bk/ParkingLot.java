@@ -1,6 +1,7 @@
 package com.bk;
 
 import com.bk.model.Slot;
+import com.bk.model.Ticket;
 import com.bk.model.Vehicle;
 
 import java.util.*;
@@ -16,6 +17,8 @@ public class ParkingLot {
 
     private Map<String, List<Slot>> reservvationByColors;
 
+    private List<Ticket> ticketList;
+
     private int nextFreeSlot;
 
     public ParkingLot(int size) {
@@ -27,6 +30,7 @@ public class ParkingLot {
         this.registrationMap = new HashMap<>();
         this.reservvationByColors = new HashMap<>();
         this.slotMap = new HashMap<>(size);
+        this.ticketList = new ArrayList<>();
         this.nextFreeSlot = 1;
         for (int i = 0; i < size; i++) {
             Slot slot = new Slot(i + 1);
@@ -47,11 +51,12 @@ public class ParkingLot {
         return this.slotMap;
     }
 
-    public int parkVehicle(String registrationNumber, String color) {
+    public Ticket parkVehicle(String registrationNumber, String color) {
         Vehicle vehicle = new Vehicle(registrationNumber, color);
 
         if (nextFreeSlot < 1) {
-            return -1;
+            printMessage("Sorry, parking lot is full");
+            return null;
         }
 
         Slot slot = slotMap.get(nextFreeSlot);
@@ -61,16 +66,21 @@ public class ParkingLot {
         this.slotMap.put(slot.getSlotNumber(), slot);
         updateColorsMap(slot, false);
         updateNextFreeSlot();
+        Ticket ticket = new Ticket(registrationNumber,color,slot.getSlotNumber());
+        ticketList.add(ticket);
 
-        return slot.getSlotNumber();
+        printMessage("Allocated slot number: "+slot.getSlotNumber());
+        return ticket;
     }
 
     public int getSlotNumberByRegistrationNumber(String registrationNumber) {
         Slot slot = this.registrationMap.get(registrationNumber);
 
         if (slot != null) {
+            printMessage(String.valueOf(slot.getSlotNumber()));
             return slot.getSlotNumber();
         } else {
+            printMessage("Not Found");
             return -1;
         }
     }
@@ -96,8 +106,53 @@ public class ParkingLot {
             this.nextFreeSlot = slotNumber;
         }
 
+        printMessage("Slot number " + slotNumber +" is free");
         return slotNumber;
 
+    }
+
+    public List<Integer> getSlotNumbersByColor(String color) {
+
+        List<Integer> slotNumbers = new ArrayList<>();
+        List<Slot> slots = getSlotListByColor(color);
+        if (slots != null) {
+            slotNumbers.addAll(slots.stream()
+                    .map(Slot::getSlotNumber).collect(Collectors.toList()));
+        }
+        printMessage(slotNumbers.isEmpty()? "NA" : slotNumbers.toString().replaceAll("[\\[\\]]",""));
+        return slotNumbers;
+    }
+
+    public int getNextFreeSlot() {
+        return this.nextFreeSlot;
+    }
+
+
+    public List<String> getRegistrationNumbersByColor(String color) {
+
+        List<String> registrationNumbers = new ArrayList<>();
+        List<Slot> slots = getSlotListByColor(color);
+        if (slots != null) {
+            registrationNumbers.addAll(slots.stream()
+                    .map(slot -> slot.getVehicle().getRegistrationNumber()).collect(Collectors.toList()));
+        }
+        printMessage(registrationNumbers.isEmpty()? "NA" : registrationNumbers.toString().replaceAll("[\\[\\]]",""));
+        return registrationNumbers;
+
+    }
+
+    public void status(){
+        System.out.println("Slot No.    Registration No    Colour");
+        for(int i =0; i< size;i++) {
+            Vehicle vehicle = this.slotMap.get(i+1).getVehicle();
+            if(vehicle != null) {
+                printMessage(String.format("%s %23s %11s", i + 1, vehicle.getRegistrationNumber(), vehicle.getColor()));
+            }
+        }
+    }
+
+    private void printMessage(String message){
+        System.out.println(message);
     }
 
     private void updateColorsMap(Slot slot, boolean remove) {
@@ -114,26 +169,6 @@ public class ParkingLot {
         this.reservvationByColors.computeIfAbsent(color, (k) -> new ArrayList<>(Arrays.asList(slot)));
     }
 
-    public List<Integer> getSlotNumbersByColor(String color) {
-
-        List<Integer> slotNumbers = new ArrayList<>();
-        List<Slot> slots = getSlotListByColor(color);
-        if (slots != null) {
-            slotNumbers.addAll(slots.stream()
-                    .map(Slot::getSlotNumber).collect(Collectors.toList()));
-        }
-        return slotNumbers;
-    }
-
-    public int getNextFreeSlot() {
-        return this.nextFreeSlot;
-    }
-
-    private List<Slot> getSlotListByColor(String color) {
-
-        return this.reservvationByColors.get(color);
-    }
-
     private void updateNextFreeSlot() {
         Optional<Slot> nextSlot = this.slotMap.values().stream()
                 .filter(slot -> slot.getVehicle() == null).findFirst();
@@ -146,15 +181,11 @@ public class ParkingLot {
 
     }
 
-    public List<String> getRegistrationListByColor(String color) {
+    private List<Slot> getSlotListByColor(String color) {
 
-        List<String> registrationNumbers = new ArrayList<>();
-        List<Slot> slots = getSlotListByColor(color);
-        if (slots != null) {
-            registrationNumbers.addAll(slots.stream()
-                    .map(slot -> slot.getVehicle().getRegistrationNumber()).collect(Collectors.toList()));
-        }
-        return registrationNumbers;
-
+        return this.reservvationByColors.get(color);
     }
+
+
+
 }

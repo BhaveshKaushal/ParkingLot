@@ -1,6 +1,7 @@
 package com.bk;
 
 import com.bk.model.Slot;
+import com.bk.model.Ticket;
 import com.bk.model.Vehicle;
 import org.junit.Before;
 import org.junit.Test;
@@ -9,18 +10,9 @@ import java.util.*;
 
 import static org.junit.Assert.*;
 
-public class ParkingLotTest {
+public class ParkingLotTest extends BaseTest {
 
-    private int size = 3;
     private ParkingLot parkingLot;
-
-    private String reg1 = "reg1";
-    private String reg2 = "reg2";
-    private String reg3 = "reg3";
-
-    private String color1 = "red";
-    private String color2 = "black";
-    private String color3 = "white";
 
     private void testSlotInitialization(Map<Integer, Slot> slotMap, int size) {
 
@@ -61,12 +53,12 @@ public class ParkingLotTest {
     public void parkTest() {
 
 
-        int slotNumber = parkingLot.parkVehicle(reg1,color1);
+        Ticket ticket = parkingLot.parkVehicle(reg1,color1);
        assertEquals(2,parkingLot.getNextFreeSlot());
 
-        Slot reservedSlot = parkingLot.getSlotMap().get(slotNumber);
+        Slot reservedSlot = parkingLot.getSlotMap().get(ticket.getSlot());
         assertNotNull(reservedSlot);
-        assertEquals(slotNumber, reservedSlot.getSlotNumber());
+        assertEquals(ticket.getSlot(), reservedSlot.getSlotNumber());
 
         Vehicle vehicle = reservedSlot.getVehicle();
         assertNotNull(vehicle);
@@ -80,22 +72,22 @@ public class ParkingLotTest {
     public void parkingFullTest() {
 
         assertEquals(3,parkingLot.getSlotMap().size());
-        int slotNumber = parkingLot.parkVehicle(reg1,color1);
-        assertEquals(1, slotNumber);
+        Ticket ticket = parkingLot.parkVehicle(reg1,color1);
+        assertEquals(1, ticket.getSlot());
         assertEquals(2,parkingLot.getNextFreeSlot());
         assertEquals(3,parkingLot.getSlotMap().size());
 
-        int slotNumber2 = parkingLot.parkVehicle(reg2,color2);
-        assertEquals(2,slotNumber2);
+        Ticket ticket2 = parkingLot.parkVehicle(reg2,color2);
+        assertEquals(2,ticket2.getSlot());
         assertEquals(3,parkingLot.getNextFreeSlot());
 
 
-        int slotNumber3 = parkingLot.parkVehicle(reg3,color3);
-        assertEquals(3,slotNumber3);
+        Ticket ticket3 = parkingLot.parkVehicle(reg3,color3);
+        assertEquals(3,ticket3.getSlot());
         assertEquals(-1,parkingLot.getNextFreeSlot());
 
-        int slotNumber4 = parkingLot.parkVehicle("parking_full","blue");
-        assertEquals(-1,slotNumber4);
+        Ticket ticket4 = parkingLot.parkVehicle("parking_full","blue");
+       assertNull(ticket4);
 
     }
 
@@ -104,24 +96,24 @@ public class ParkingLotTest {
     @Test
     public void freeSlotTest() {
 
-        int slotNumber = parkingLot.parkVehicle(reg1,color1);
-        assertEquals(1,slotNumber);
+        Ticket ticket = parkingLot.parkVehicle(reg1,color1);
+        assertEquals(1,ticket.getSlot());
         assertEquals(2, parkingLot.getNextFreeSlot());
-        assertEquals(slotNumber,parkingLot.getSlotNumberByRegistrationNumber(reg1));
-        assertEquals(reg1,parkingLot.getSlotMap().get(slotNumber).getVehicle().getRegistrationNumber());
+        assertEquals(ticket.getSlot(),parkingLot.getSlotNumberByRegistrationNumber(reg1));
+        assertEquals(reg1,parkingLot.getSlotMap().get(ticket.getSlot()).getVehicle().getRegistrationNumber());
 
-        int slotNumber2 = parkingLot.parkVehicle(reg2,color2);
-        assertEquals(2,slotNumber2);
+        Ticket ticket2 = parkingLot.parkVehicle(reg2,color2);
+        assertEquals(2,ticket2.getSlot());
         assertEquals(3, parkingLot.getNextFreeSlot());
-        assertEquals(slotNumber2,parkingLot.getSlotNumberByRegistrationNumber(reg2));
-        assertEquals(reg2,parkingLot.getSlotMap().get(slotNumber2).getVehicle().getRegistrationNumber());
+        assertEquals(ticket2.getSlot(),parkingLot.getSlotNumberByRegistrationNumber(reg2));
+        assertEquals(reg2,parkingLot.getSlotMap().get(ticket2.getSlot()).getVehicle().getRegistrationNumber());
 
 
-        int slotNumber3 = parkingLot.parkVehicle(reg3,color3);
-        assertEquals(3,slotNumber3);
+        Ticket ticket3 = parkingLot.parkVehicle(reg3,color3);
+        assertEquals(3,ticket3.getSlot());
         assertEquals(-1, parkingLot.getNextFreeSlot());
-        assertEquals(slotNumber3,parkingLot.getSlotNumberByRegistrationNumber(reg3));
-        assertEquals(reg3,parkingLot.getSlotMap().get(slotNumber3).getVehicle().getRegistrationNumber());
+        assertEquals(ticket3.getSlot(),parkingLot.getSlotNumberByRegistrationNumber(reg3));
+        assertEquals(reg3,parkingLot.getSlotMap().get(ticket3.getSlot()).getVehicle().getRegistrationNumber());
 
         int freedSlotNumber = parkingLot.freeSlot(2);
         assertNotEquals(-1,freedSlotNumber);
@@ -176,13 +168,13 @@ public class ParkingLotTest {
     @Test
     public void getRegistrationListByColor(){
         intializeForColorTest();
-        List<String> redRegistrationList = parkingLot.getRegistrationListByColor(color1);
+        List<String> redRegistrationList = parkingLot.getRegistrationNumbersByColor(color1);
         assertNotNull(redRegistrationList);
         assertFalse(redRegistrationList.isEmpty());
         assertEquals(2, redRegistrationList.size());
         assertEquals(Arrays.asList(reg1,reg2),redRegistrationList);
 
-        List<String> blackSlotNumbers = parkingLot.getRegistrationListByColor(color2);
+        List<String> blackSlotNumbers = parkingLot.getRegistrationNumbersByColor(color2);
         assertNotNull(blackSlotNumbers);
         assertFalse(blackSlotNumbers.isEmpty());
         assertEquals(1, blackSlotNumbers.size());
@@ -198,7 +190,7 @@ public class ParkingLotTest {
 
         int freedRedSlot = parkingLot.freeSlot(1);
         assertEquals(1,freedRedSlot);
-        redRegistrationList = parkingLot.getRegistrationListByColor(color1);
+        redRegistrationList = parkingLot.getRegistrationNumbersByColor(color1);
         assertFalse(redRegistrationList.isEmpty());
         assertEquals(1,redRegistrationList.size());
         assertEquals(reg2,redRegistrationList.get(0));
@@ -206,14 +198,14 @@ public class ParkingLotTest {
 
     private void intializeForColorTest() {
 
-        int slotNumber1 = parkingLot.parkVehicle(reg1,color1);
-        assertEquals(1,slotNumber1);
+        Ticket ticket = parkingLot.parkVehicle(reg1,color1);
+        assertEquals(1,ticket.getSlot());
 
-        int slotNumber2 = parkingLot.parkVehicle(reg2,color1);
-        assertEquals(2,slotNumber2);
+        Ticket ticket2= parkingLot.parkVehicle(reg2,color1);
+        assertEquals(2,ticket2.getSlot());
 
-        int slotNumber3 = parkingLot.parkVehicle(reg3,color2);
-        assertEquals(3,slotNumber3);
+        Ticket ticket3 = parkingLot.parkVehicle(reg3,color2);
+        assertEquals(3,ticket3.getSlot());
     }
 
 
