@@ -148,7 +148,7 @@ public class ParkingLotTest extends BaseTest {
 
         printStart();
 
-        intializeForColorTest();
+        fillUpParking();
        List<Integer> redSlotNumbers  = parkingLot.getSlotNumbersByColor(color1);
        assertNotNull(redSlotNumbers);
        assertFalse(redSlotNumbers.isEmpty());
@@ -184,7 +184,7 @@ public class ParkingLotTest extends BaseTest {
 
         printStart();
 
-        intializeForColorTest();
+        fillUpParking();
         List<String> redRegistrationList = parkingLot.getRegistrationNumbersByColor(color1);
         assertNotNull(redRegistrationList);
         assertFalse(redRegistrationList.isEmpty());
@@ -215,7 +215,21 @@ public class ParkingLotTest extends BaseTest {
 
     }
 
-    private void intializeForColorTest() {
+    @Test
+    public void statusTest() {
+        printStart();
+        try {
+            fillUpParking();
+            parkingLot.status();
+        } catch (Exception e) {
+            assertNull(e);
+        }
+        printEnd();
+    }
+
+
+
+    private void fillUpParking() {
 
         Ticket ticket = parkingLot.parkVehicle(reg1,color1);
         assertEquals(1,ticket.getSlot());
