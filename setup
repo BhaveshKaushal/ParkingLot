@@ -1,0 +1,18 @@
+# Add script to:
+# * Install dependencies
+# * Build/Compile
+# * Run Test Suit to validate
+#
+# After this is run, bin/parking_lot
+# should Just Work.
+
+mkdir -p ../target/classes ../lib
+curl -L -O http://central.maven.org/maven2/junit/junit/4.12/junit-4.12.jar
+curl -L -O http://central.maven.org/maven2/org/hamcrest/hamcrest-core/1.3/hamcrest-core-1.3.jar
+mv ./*.jar ../lib/
+
+javac -cp  ../lib/*:../src/main/java:../src/test/java ../src/**/java/com/bk/**/*.java ../src/**/java/com/bk/*.java -d ../target/classes/ 
+
+java -cp ../lib/junit-4.12.jar:../lib/hamcrest-core-1.3.jar:../target/classes:. org.junit.runner.JUnitCore com.bk.ParkingLotTest com.bk.model.VehicleTest com.bk.model.SlotTest com.bk.model.SlotTest com.bk.processor.BaseProcessorTest
+
+jar cvfm ../target/ParkingLot-1.0-SNAPSHOT.jar ../src/main/resources/META-INF/MANIFEST.MF -C ../target/classes/ .
