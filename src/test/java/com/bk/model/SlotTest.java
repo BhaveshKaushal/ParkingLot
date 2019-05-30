@@ -10,14 +10,11 @@ public class SlotTest extends BaseTest {
     @Test
     public void slotTest() {
 
-        printStart();
-
         Slot slot = new Slot(1);
         assertNotNull(slot);
         assertEquals(1,slot.getSlotNumber());
         assertNull(slot.getVehicle());
 
-        printEnd();
 
     }
 }

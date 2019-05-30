@@ -9,7 +9,6 @@ public class VehicleTest extends BaseTest {
 
     @Test
     public void vehicleTest() {
-        printStart();
 
         String registrationNumber = "test-registration-number";
         String color= "white";
@@ -18,7 +17,5 @@ public class VehicleTest extends BaseTest {
         assertNotNull(vehicle);
         assertEquals(color, vehicle.getColor());
         assertEquals(registrationNumber,vehicle.getRegistrationNumber());
-
-        printEnd();
     }
 }

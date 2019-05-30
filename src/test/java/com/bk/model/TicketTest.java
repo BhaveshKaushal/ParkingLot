@@ -11,7 +11,6 @@ public class TicketTest extends BaseTest {
 
     @Test
     public void ticketTest() {
-        printStart();
 
         String registrationNumber = "test-registration-number";
         String color= "white";
@@ -22,7 +21,5 @@ public class TicketTest extends BaseTest {
         assertEquals(color, ticket.getColor());
         assertEquals(registrationNumber,ticket.getRegistrationNumber());
         assertEquals(slotNumber,ticket.getSlot());
-
-        printEnd();
     }
 }

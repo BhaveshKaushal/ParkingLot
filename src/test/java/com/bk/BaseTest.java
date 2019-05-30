@@ -3,6 +3,8 @@ package com.bk;
 import org.junit.Rule;
 import org.junit.rules.ExpectedException;
 import org.junit.rules.TestName;
+import org.junit.rules.TestWatcher;
+import org.junit.runner.Description;
 
 public class BaseTest {
 
@@ -21,11 +23,21 @@ public class BaseTest {
     @Rule
     public final ExpectedException exception = ExpectedException.none();
 
-   public void printStart(){
-        System.out.println("\n>>>>>>>>>> "+testName.getMethodName() + " STARTS <<<<<<<<<<<<");
-    }
-
-    public void printEnd(){
-        System.out.println("<<<<<<<<<< "+testName.getMethodName() + " ENDS >>>>>>>>>>>>>\n");
-    }
+    @Rule
+    public TestWatcher testWatcher = new TestWatcher() {
+        @Override
+        protected void starting(final Description description) {
+            String methodName = description.getMethodName();
+            String className = description.getClassName();
+            className = className.substring(className.lastIndexOf('.') + 1);
+            System.out.println("\n>>>>>>>>>>>>>>>> Starting JUnit-test: " + className + "." + methodName);
+        }
+        @Override
+        protected void finished(Description description) {
+            String methodName = description.getMethodName();
+            String className = description.getClassName();
+            className = className.substring(className.lastIndexOf('.') + 1);
+            System.out.println("<<<<<<<<<<<< Ended JUnit-test: " + className + "." + methodName + "\n");
+        }
+    };
 }

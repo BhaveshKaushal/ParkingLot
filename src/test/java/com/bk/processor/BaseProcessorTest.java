@@ -25,19 +25,15 @@ public class BaseProcessorTest extends BaseTest {
 
     @Test
     public void initializeParkingLotTest() {
-        printStart();
 
         setUpParkingLot();
         assertNotNull(parkingLot);
         assertEquals(size,parkingLot.getSize());
         assertEquals(size, parkingLot.getSlotMap().size());
 
-        printEnd();
-
     }
     @Test
     public void parkTest() {
-        printStart();
 
         try {
             parkOneVehicle();
@@ -46,13 +42,10 @@ public class BaseProcessorTest extends BaseTest {
             assertNull(e);
         }
 
-        printEnd();
-
     }
 
     @Test
     public void leaveTest() {
-        printStart();
 
         fillUpParking();
         int slotNumber = parkingLot.freeSlot(1);
@@ -64,27 +57,18 @@ public class BaseProcessorTest extends BaseTest {
         assertTrue(parkingLot.getSlotNumbersByColor(color1).isEmpty());
        assertEquals(-1, parkingLot.getSlotNumberByRegistrationNumber(color1));
 
-       printEnd();
-
-
     }
 
     @Test
     public void parkingFull() {
-        printStart();
-
         fillUpParking();
         String line = "park park_full_test white";
        baseProcessor.process(baseProcessor.getInputs(line));
        assertEquals(-1, parkingLot.getNextFreeSlot());
-
-       printEnd();
     }
 
     @Test
     public void invalidOperationOrderTest() {
-
-        printStart();
 
         String line = "park park_full_test white";
        BaseProcessor baseProcessor =  new BaseProcessor();
@@ -97,8 +81,6 @@ public class BaseProcessorTest extends BaseTest {
 
        assertNotNull(exception);
        assertTrue(exception instanceof IllegalArgumentException);
-
-       printEnd();
 
     }
 
