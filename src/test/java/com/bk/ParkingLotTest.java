@@ -32,6 +32,8 @@ public class ParkingLotTest extends BaseTest {
     @Test
     public void parkingLotTest() {
 
+        printStart();
+
         assertNotNull(parkingLot);
         assertEquals(size,parkingLot.getSize());
 
@@ -47,11 +49,13 @@ public class ParkingLotTest extends BaseTest {
         //test all initialized with slot Numbers and not allocated to any vehicle
         testSlotInitialization(slotMap,size);
 
+        printEnd();
     }
 
     @Test
     public void parkTest() {
 
+        printStart();
 
         Ticket ticket = parkingLot.parkVehicle(reg1,color1);
        assertEquals(2,parkingLot.getNextFreeSlot());
@@ -66,10 +70,14 @@ public class ParkingLotTest extends BaseTest {
         assertEquals(reg1,vehicle.getRegistrationNumber());
         assertEquals(1,parkingLot.getSlotNumberByRegistrationNumber(reg1));
 
+        printEnd();
+
     }
 
     @Test
     public void parkingFullTest() {
+
+        printStart();
 
         assertEquals(3,parkingLot.getSlotMap().size());
         Ticket ticket = parkingLot.parkVehicle(reg1,color1);
@@ -89,12 +97,16 @@ public class ParkingLotTest extends BaseTest {
         Ticket ticket4 = parkingLot.parkVehicle("parking_full","blue");
        assertNull(ticket4);
 
+       printEnd();
+
     }
 
 
 
     @Test
     public void freeSlotTest() {
+
+        printStart();
 
         Ticket ticket = parkingLot.parkVehicle(reg1,color1);
         assertEquals(1,ticket.getSlot());
@@ -128,11 +140,13 @@ public class ParkingLotTest extends BaseTest {
         assertEquals(-1, parkingLot.getSlotNumberByRegistrationNumber(reg1));
         assertNull(parkingLot.getSlotMap().get(freedSlotNumber2).getVehicle());
 
-
+        printEnd();
     }
 
     @Test
     public void getSlotListbyColorTest(){
+
+        printStart();
 
         intializeForColorTest();
        List<Integer> redSlotNumbers  = parkingLot.getSlotNumbersByColor(color1);
@@ -162,11 +176,14 @@ public class ParkingLotTest extends BaseTest {
         assertEquals(1,redSlotNumbers.size());
         assertEquals(2,redSlotNumbers.get(0).longValue());
 
-
+        printEnd();
     }
 
     @Test
     public void getRegistrationListByColor(){
+
+        printStart();
+
         intializeForColorTest();
         List<String> redRegistrationList = parkingLot.getRegistrationNumbersByColor(color1);
         assertNotNull(redRegistrationList);
@@ -193,7 +210,9 @@ public class ParkingLotTest extends BaseTest {
         redRegistrationList = parkingLot.getRegistrationNumbersByColor(color1);
         assertFalse(redRegistrationList.isEmpty());
         assertEquals(1,redRegistrationList.size());
-        assertEquals(reg2,redRegistrationList.get(0));
+
+        printEnd();
+
     }
 
     private void intializeForColorTest() {

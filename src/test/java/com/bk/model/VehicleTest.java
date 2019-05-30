@@ -1,12 +1,16 @@
 package com.bk.model;
 
 import static org.junit.Assert.*;
+
+import com.bk.BaseTest;
 import org.junit.Test;
 
-public class VehicleTest {
+public class VehicleTest extends BaseTest {
 
     @Test
     public void vehicleTest() {
+        printStart();
+
         String registrationNumber = "test-registration-number";
         String color= "white";
         Vehicle vehicle = new Vehicle(registrationNumber,color);
@@ -14,5 +18,7 @@ public class VehicleTest {
         assertNotNull(vehicle);
         assertEquals(color, vehicle.getColor());
         assertEquals(registrationNumber,vehicle.getRegistrationNumber());
+
+        printEnd();
     }
 }

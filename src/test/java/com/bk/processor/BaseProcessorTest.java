@@ -3,7 +3,6 @@ package com.bk.processor;
 import com.bk.BaseTest;
 import com.bk.ParkingLot;
 import com.bk.model.Operation;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -19,21 +18,26 @@ public class BaseProcessorTest extends BaseTest {
 
     @Before
    public void  setUpBeforeAll() {
+         System.out.println("Set up for next test");
          baseProcessor = new BaseProcessor();
          setUpParkingLot();
     }
 
     @Test
     public void initializeParkingLotTest() {
+        printStart();
 
         setUpParkingLot();
         assertNotNull(parkingLot);
         assertEquals(size,parkingLot.getSize());
         assertEquals(size, parkingLot.getSlotMap().size());
 
+        printEnd();
+
     }
     @Test
     public void parkTest() {
+        printStart();
 
         try {
             parkOneVehicle();
@@ -42,10 +46,14 @@ public class BaseProcessorTest extends BaseTest {
             assertNull(e);
         }
 
+        printEnd();
+
     }
 
     @Test
     public void leaveTest() {
+        printStart();
+
         fillUpParking();
         int slotNumber = parkingLot.freeSlot(1);
         assertEquals(1,slotNumber);
@@ -56,23 +64,41 @@ public class BaseProcessorTest extends BaseTest {
         assertTrue(parkingLot.getSlotNumbersByColor(color1).isEmpty());
        assertEquals(-1, parkingLot.getSlotNumberByRegistrationNumber(color1));
 
+       printEnd();
+
 
     }
 
     @Test
     public void parkingFull() {
+        printStart();
+
         fillUpParking();
         String line = "park park_full_test white";
        baseProcessor.process(baseProcessor.getInputs(line));
        assertEquals(-1, parkingLot.getNextFreeSlot());
+
+       printEnd();
     }
 
-    @Test(expected = IllegalArgumentException.class )
+    @Test
     public void invalidOperationOrderTest() {
+
+        printStart();
 
         String line = "park park_full_test white";
        BaseProcessor baseProcessor =  new BaseProcessor();
-       baseProcessor.process(baseProcessor.getInputs(line));
+       Exception exception = null;
+       try {
+           baseProcessor.process(baseProcessor.getInputs(line));
+       } catch (Exception e) {
+           exception = e;
+       }
+
+       assertNotNull(exception);
+       assertTrue(exception instanceof IllegalArgumentException);
+
+       printEnd();
 
     }
 
@@ -82,9 +108,7 @@ public class BaseProcessorTest extends BaseTest {
         String line = String.format("%s %d", Operation.CREATE_PARKING_LOT.getValue(), size);
         String[] inputs = baseProcessor.getInputs(line);
         baseProcessor.process(inputs);
-
         parkingLot = baseProcessor.getParkingLot();
-
 
     }
 
